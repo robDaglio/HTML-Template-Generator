@@ -1,3 +1,7 @@
 .idea/
 poc/
 template/
+__pycache__/
+generator/__pycache__/*
+api/__pycache__/*
+*.pyc

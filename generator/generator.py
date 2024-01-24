@@ -39,11 +39,14 @@ class TemplateGenerator:
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Document</title>
         <link rel="stylesheet" href="assets/css/style.css">
+        <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     </head>
     <body>
         <p>Hello, Template!</p>
     
         <script type="text/javascript" src="assets/js/script.js"></script>
+        <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
+        
     </body>
     </html>
     '''
@@ -154,10 +157,3 @@ class TemplateGenerator:
 
                         except IOError as e:
                             log.error(f'Error writing file:\n{e}', exc_info=True)
-
-
-# if __name__ == '__main__':
-#     TemplateGenerator(template_type='django', template_path='tester').create_template()
-#
-
-
