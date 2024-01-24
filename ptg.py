@@ -1,45 +1,36 @@
 #!/usr/bin/env python
-from os import system
-from time import sleep
-from sys import argv, exit
+import configargparse
+import logging
+import json
+import sys
 
-def define_template():
+from generator.generator import TemplateGenerator
 
-	template = """<!DOCTYPE  html>
-<html lang='en'>
-	<head>
-		<meta charset='utf-8'>
-		<title>Template</title>
-		<!-- Your code here -->
-	</head>
-	<body>
-		<p>Template</p>
-		<!-- Your code here -->
-	</body>
-</html>
-"""
-	return template
 
-def create_file(t, f_name):
-	
-	try:
-		with open(f'{f_name}.html', 'w+') as template_file:
-			template_file.write(t)
-	except:
-		print("[x] Unable to write file!")
-	finally:
-		template_file.close() 
+parser = configargparse.get_argument_parser(
+    description='Configuration options for project template generator',
+    formatter_class=configargparse.ArgumentDefaultsRawHelpFormatter
+)
 
-def get_args():
+parser.add_argument('-p', '--path', type=str, default='template',
+                    help='Path of the new project.')
 
-	if len(argv) is not 2:
-		print("[x] Please provide a file name!")
-		print(f"[!] Usage: html <file_name>")
-		exit(0)
-	else:
-		return argv[1]
-		pass
+parser.add_argument('-t', '--type', type=str, default='native',
+                    help='The type of project (native | django | flask)')
+
+parser.add_argument('-l', '--log-level', type=str, default='info')
+
+cfg = parser.parse_known_args()[0]
+
+logging.basicConfig(
+    format='%(process)d - %(asctime)s - %(levelname)s: %(message)s',
+    datefmt='%H:%M:%S',
+    level=logging.getLevelName(cfg.log_level.upper()),
+    handlers=[logging.StreamHandler(sys.stdout)]
+)
+
+log = logging.getLogger()
+log.debug(json.dumps(vars(cfg), indent=4))
 
 if __name__ == '__main__':
-
-	create_file(define_template(), get_args())
+    TemplateGenerator(template_type=cfg.type, template_path=cfg.path).create_template()
